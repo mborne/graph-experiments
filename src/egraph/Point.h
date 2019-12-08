@@ -6,5 +6,7 @@
 namespace egraph {
     typedef CGAL::Simple_cartesian<double> Kernel;
     typedef CGAL::Point_2<Kernel> Point ;
+
+    std::string asWKT(const Point& g);
 }
 

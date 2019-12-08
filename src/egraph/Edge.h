@@ -1,6 +1,7 @@
 #pragma once
 
 #include <egraph/Point.h>
+#include <egraph/LineString.h>
 
 namespace egraph {
 
@@ -13,6 +14,8 @@ namespace egraph {
         int target ;
         /* direction (-1, 0 or 1)*/
         int direction ;
+        /* geometry */
+        LineString geom;
     };
 
 }

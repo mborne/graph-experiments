@@ -23,7 +23,11 @@ namespace egraph {
          */
         std::vector<std::string> layerNames();
 
+        /**
+         * Récupération des arcs à partir d'une table
+         */
         std::vector<Edge> edges( const std::string& layerName = "edge" ) ;
+
     private:
         GDALDataset * dataset;
     };

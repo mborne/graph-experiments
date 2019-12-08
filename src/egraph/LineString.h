@@ -5,5 +5,7 @@
 
 namespace egraph {
     typedef std::vector<Point> LineString ;
+
+    std::string asWKT(const LineString& g);
 }
 

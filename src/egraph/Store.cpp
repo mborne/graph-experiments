@@ -83,7 +83,7 @@ std::vector<Edge> Store::edges(const std::string& layerName)
     int indexId     = findFieldIndex(layer, "id", false);
     int indexSource = findFieldIndex(layer,"source", true);
     int indexTarget = findFieldIndex(layer,"target", true);
-    // int indexSens = layer->FindFieldIndex("SENS", false);
+    int indexDirection = layer->FindFieldIndex("direction", false);
 
     std::vector<Edge> edges;
     edges.reserve(layer->GetFeatureCount());
@@ -95,22 +95,20 @@ std::vector<Edge> Store::edges(const std::string& layerName)
         edge.id = (indexId < 0 ) ? feature->GetFID() : feature->GetFieldAsInteger(indexId);
         edge.source = feature->GetFieldAsInteger(indexSource);
         edge.target = feature->GetFieldAsInteger(indexTarget);
-
-        // // sens
-        // road.setDirection(decodeSens(feature->GetFieldAsString(indexSens)));
-        // // geometry
-        // OGRGeometry *geometry = feature->GetGeometryRef();
-        // OGRLineString *ls = dynamic_cast<OGRLineString *>(geometry);
-        // if (ls != NULL)
-        // {
-        //     LineString geometry;
-        //     geometry.reserve(ls->getNumPoints());
-        //     for ( int i = 0; i < ls->getNumPoints(); i++ ){
-        //         Coordinate coordinate = {ls->getX(i),ls->getY(i)};
-        //         geometry.push_back(coordinate);
-        //     }
-        //     road.setGeometry(geometry);
-        // }
+        edge.direction = ( indexDirection < 0 ) ? 0 : feature->GetFieldAsInteger(indexDirection);
+        /* decode geometry */
+        {
+            OGRGeometry *geometry = feature->GetGeometryRef();
+            OGRLineString *ls = dynamic_cast<OGRLineString *>(geometry);
+            if (ls != NULL)
+            {
+                edge.geom.reserve(ls->getNumPoints());
+                for ( int i = 0; i < ls->getNumPoints(); i++ ){
+                    Point point(ls->getX(i),ls->getY(i));
+                    edge.geom.push_back(point);
+                }
+            }
+        }
 
         edges.push_back(edge);
         feature = layer->GetNextFeature();

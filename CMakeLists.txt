@@ -10,6 +10,8 @@ include_directories(
 
 add_library(egraph
     src/egraph/Store.cpp
+    src/egraph/LineString.cpp
+    src/egraph/Point.cpp
 )
 target_link_libraries(egraph
     gdal
