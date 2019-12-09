@@ -106,7 +106,7 @@ namespace egraph {
 		edge_handle addEdge(
 			vertex_handle source,
 			vertex_handle target,
-			const vertex_properties & properties = vertex_properties()
+			const edge_properties & properties = edge_properties()
 		){
 			assert( isValid(source) );
 			assert( isValid(target) );
@@ -114,6 +114,14 @@ namespace egraph {
 			edge_handle e = new edge_t( source, target, properties ) ;
 			_edges.insert( e ) ;
 			return e ;
+		}
+
+		int numVertices() const {
+			return _vertices.size();
+		}
+
+		int numEdges() const {
+			return _edges.size();
 		}
 
 		/**
