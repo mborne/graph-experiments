@@ -4,9 +4,9 @@
 
 namespace egraph {
 
-    struct Vertex {
-        int id ;
-        Point position ;
+    struct DefaultVertex {
+        int    id ;
+        Point  geom ;
     };
 
 }

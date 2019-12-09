@@ -1,11 +1,12 @@
 #pragma once
 
+#include <egraph/Direction.h>
 #include <egraph/Point.h>
 #include <egraph/LineString.h>
 
 namespace egraph {
 
-    struct Edge {
+    struct DefaultEdge {
         /* edge id */
         int id ;
         /* source id */
@@ -13,7 +14,7 @@ namespace egraph {
         /* target id */
         int target ;
         /* direction (-1, 0 or 1)*/
-        int direction ;
+        Direction direction ;
         /* geometry */
         LineString geom;
     };
