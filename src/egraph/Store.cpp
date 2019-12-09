@@ -1,5 +1,7 @@
 #include <egraph/Store.h>
 
+#include <egraph/helper/ogr.h>
+
 #include <gdal/gdal.h>
 #include <gdal/gdal_priv.h>
 #include <gdal/gdal_frmts.h>
@@ -16,11 +18,7 @@ Store::Store(const char *path)
 {
     GDALAllRegister();
 
-    this->dataset = (GDALDataset *)GDALOpenEx(path, GDAL_OF_VECTOR, NULL, NULL, NULL);
-    if (this->dataset == NULL)
-    {
-        throw std::runtime_error("fail to open file");
-    }
+    this->dataset = helper::openDataset(path);
 }
 
 ///
@@ -36,36 +34,7 @@ Store::~Store()
 ///
 std::vector<std::string> Store::layerNames()
 {
-    std::vector<std::string> result ;
-
-    int layerCount = this->dataset->GetLayerCount();
-    for ( int i = 0; i < layerCount; i++ ){
-        OGRLayer *layer = this->dataset->GetLayer(i);
-        result.push_back( layer->GetName() );
-    }
-
-    return result;
-}
-
-/**
- * Utilitaire pour rechercher les noms de champs
- */
-int findFieldIndex( OGRLayer *layer, const char* name, bool required ){
-    int index = layer->FindFieldIndex(name,false);
-    if ( index < 0 && required ){
-        std::ostringstream oss;
-        oss << "Required field " << name << " not found (found : ";
-        OGRFeatureDefn * def = layer->GetLayerDefn();
-        for ( int i = 0; i < def->GetFieldCount(); i++ ){
-            if ( i != 0 ){
-                oss << ", ";
-            }
-            oss << "'" << def->GetFieldDefn(i)->GetNameRef() << "'";
-        }
-        oss << ")";
-        throw std::runtime_error(oss.str());
-    }
-    return index;
+    return helper::getLayerNames(dataset);
 }
 
 ///
@@ -73,14 +42,9 @@ int findFieldIndex( OGRLayer *layer, const char* name, bool required ){
 ///
 std::vector<DefaultVertex> Store::vertices( const std::string& layerName )
 {
-    OGRLayer *layer = this->dataset->GetLayerByName(layerName.c_str());
-    if ( layer == NULL ){
-        std::ostringstream oss;
-        oss << "Layer " << layerName << " not found";
-        throw std::runtime_error(oss.str());
-    }
+    OGRLayer *layer = helper::getLayerByName(dataset,layerName);
 
-    int indexId     = findFieldIndex(layer, "id", false);
+    int indexId = helper::getFieldIndex(layer, "id", false);
     std::vector<DefaultVertex> vertices;
     vertices.reserve(layer->GetFeatureCount());
 
@@ -117,10 +81,10 @@ std::vector<DefaultEdge> Store::edges(const std::string& layerName)
         oss << "Layer " << layerName << " not found";
         throw std::runtime_error(oss.str());
     }
-    int indexId     = findFieldIndex(layer, "id", false);
-    int indexSource = findFieldIndex(layer,"source", true);
-    int indexTarget = findFieldIndex(layer,"target", true);
-    int indexDirection = layer->FindFieldIndex("direction", false);
+    int indexId        = helper::getFieldIndex(layer, "id", false);
+    int indexSource    = helper::getFieldIndex(layer, "source");
+    int indexTarget    = helper::getFieldIndex(layer, "target");
+    int indexDirection = helper::getFieldIndex(layer, "direction", false);
 
     std::vector<DefaultEdge> edges;
     edges.reserve(layer->GetFeatureCount());
