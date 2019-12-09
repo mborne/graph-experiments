@@ -8,6 +8,8 @@ namespace egraph {
 
     class GraphBuilder {
     public:
+        typedef typename DefaultGraph::vertex_descriptor vertex_descriptor;
+        typedef typename DefaultGraph::edge_descriptor   edge_descriptor;
 
         GraphBuilder(DefaultGraph & graph):
             _graph(graph)

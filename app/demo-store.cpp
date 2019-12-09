@@ -29,15 +29,10 @@ int main(int argc, char* argv[]){
     {
         DefaultGraph::vertex_iterator it,end;
         for ( boost::tie(it,end) = boost::vertices(graph); it != end; ++it ){
-            vertex_descriptor v = *it;
+            DefaultGraph::vertex_descriptor v = *it;
             std::cout << graph[v].id << " in : " << boost::in_degree(v,graph) << std::endl;
         }
     }
 
-    // std::cout << edges.size() << std::endl;
-    // std::cout << "id,source,target,direction,geom" << std::endl;
-    // for ( const DefaultEdge & edge : edges ){
-    //     std::cout << edge.id << "," << edge.source << "," << edge.target << "," << edge.direction << "," << asWKT(edge.geom) << std::endl;
-    // }
 
 }

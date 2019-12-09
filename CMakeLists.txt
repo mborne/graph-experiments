@@ -25,3 +25,8 @@ target_link_libraries(demo-store
     egraph
 )
 
+add_executable(demo-dijkstra app/demo-dijkstra.cpp)
+target_link_libraries(demo-dijkstra
+    egraph
+)
+

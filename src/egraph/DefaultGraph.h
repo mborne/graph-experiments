@@ -15,7 +15,4 @@ namespace egraph {
         DefaultEdge                /* edge properties */
     >;
 
-    typedef boost::graph_traits<DefaultGraph>::vertex_descriptor vertex_descriptor;
-    typedef boost::graph_traits<DefaultGraph>::edge_descriptor   edge_descriptor;
-
 }
