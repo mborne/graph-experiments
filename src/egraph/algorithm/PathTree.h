@@ -1,5 +1,7 @@
-#ifndef _EGRAPH_ALGORITHM_SHORTESTPATHTREE_H_
-#define _EGRAPH_ALGORITHM_SHORTESTPATHTREE_H_
+#pragma once
+
+#include <boost/graph/graph_traits.hpp>
+#include <egraph/algorithm/PathTreeNode.h>
 
 #include <map>
 #include <algorithm>
@@ -18,73 +20,31 @@ namespace algorithm {
 	 * @brief builds a shortest path tree
 	 */
 	template < typename Graph >
-	class ShortestPathTree {
+	class PathTree {
 	public:
-		typedef typename Graph::vertex_handle vertex_handle ;
-		typedef typename Graph::directed_edge directed_edge ;
+        typedef typename boost::graph_traits<Graph>::vertex_descriptor vertex_descriptor;
+        typedef typename boost::graph_traits<Graph>::edge_descriptor   edge_descriptor;
 
+		typedef PathTreeNode<Graph> node_t;
 
 		/**
-		 * @brief vertex marker
+		 * A set of nodes indexed according "node.visited"
 		 */
-		struct marker_t {
-			/**
-			 * @brief constructor
-			 */
-			marker_t(
-				vertex_handle vertex_ = NULL ,
-				double cost_ = 0.0,
-				directed_edge reachingEdge_ = directed_edge(),
-				bool visited_ = false
-			):
-				vertex(vertex_),
-				cost(cost_),
-				reachingEdge(reachingEdge_),
-				visited(visited_)
-			{
-
-			}
-
-			/**
-			 * @brief comparator
-			 */
-			inline bool operator < ( const marker_t & other ) const {
-				return vertex < other.vertex ;
-			}
-
-			/**
-			 * @brief vertex
-			 */
-			vertex_handle vertex ;
-			/**
-			 * @brief cost to reach the vertex
-			 */
-			double        cost ;
-			/**
-			 * @brief directed edge reaching the vertex
-			 */
-			directed_edge reachingEdge ;
-			/**
-			 * @brief indicates if the vertex is visited
-			 */
-			bool          visited ;
-		} ;
-
 		typedef typename boost::multi_index_container<
-			marker_t,
+			node_t,
 			boost::multi_index::indexed_by<
 				// sort by item::operator<
-				boost::multi_index::ordered_unique< boost::multi_index::identity<marker_t> >,
+				boost::multi_index::ordered_unique< boost::multi_index::identity<node_t> >,
 				// sort by less<bool> on visited
-				boost::multi_index::ordered_non_unique< boost::multi_index::member< marker_t, bool, &marker_t::visited > >
+				boost::multi_index::ordered_non_unique< boost::multi_index::member< node_t, bool, &node_t::visited > >
 			>
-		> marker_set;
+		> node_set;
 
-		typedef typename marker_set::template nth_index<0>::type  marker_vertex_index_t ;
+		typedef typename node_set::template nth_index<0>::type    marker_vertex_index_t ;
 		typedef typename marker_vertex_index_t::iterator          marker_iterator ;
 		typedef typename marker_vertex_index_t::const_iterator    const_marker_iterator ;
 
-		typedef typename marker_set::template nth_index<1>::type  marker_visited_index_t ;
+		typedef typename node_set::template nth_index<1>::type    marker_visited_index_t ;
 		typedef typename marker_visited_index_t::iterator         marker_visited_iterator ;
 		typedef typename marker_visited_index_t::const_iterator   const_marker_visited_iterator ;
 
@@ -92,7 +52,7 @@ namespace algorithm {
 		/**
 		 * @brief constructor with a graph
 		 */
-		ShortestPathTree( Graph & graph ):
+		PathTree( Graph & graph ):
 			_graph(graph)
 		{
 
@@ -101,17 +61,17 @@ namespace algorithm {
 		/**
 		 * @brief mark the vertex as reached with a cost
 		 */
-		void setRoot( vertex_handle root ){
+		void setRoot( vertex_descriptor root ){
 			_markers.clear() ;
 			_root = root ;
-			_markers.insert( marker_t(_root,0.0) ) ;
+			_markers.insert( node_t(_root,0.0) ) ;
 		}
 
 		/**
 		 * @brief get the path to a vertex (empty is not reached)
 		 */
-		std::vector< directed_edge > path( vertex_handle target ) const {
-			std::vector< directed_edge > result ;
+		std::vector< edge_descriptor > path( vertex_descriptor target ) const {
+			std::vector< edge_descriptor > result ;
 
 			const_marker_iterator it = _markers.find( target );
 			if ( it == _markers.end() ){
@@ -131,7 +91,7 @@ namespace algorithm {
 		/**
 		 * @brief indicates if a vertex is reached
 		 */
-		inline bool isReached( vertex_handle vertex ) const {
+		inline bool isReached( vertex_descriptor vertex ) const {
 			return _markers.find( vertex ) != _markers.end() ;
 		}
 
@@ -140,7 +100,7 @@ namespace algorithm {
 		 *
 		 * @warning the vertex must be reached
 		 */
-		const marker_t & marker( vertex_handle vertex ) const {
+		const node_t & marker( vertex_descriptor vertex ) const {
 			marker_iterator it = _markers.template get<0>().find( vertex );
 			return *it ;
 		}
@@ -150,7 +110,7 @@ namespace algorithm {
 		 *
 		 * @todo check consistency
 		 */
-		void setMarker( marker_t marker ) {
+		void setMarker( node_t marker ) {
 			marker_iterator it = _markers.template get<0>().find( marker.vertex );
 			if ( it != _markers.template get<0>().end() ){
 				_markers.replace( it, marker );
@@ -162,8 +122,8 @@ namespace algorithm {
 		/**
 		 * @brief find the nearest and visited vertex
 		 */
-		vertex_handle findNearestAndNotVisitedVertex() const {
-			vertex_handle vertex = NULL ;
+		vertex_descriptor findNearestAndNotVisitedVertex() const {
+			vertex_descriptor vertex = NULL ;
 			double        cost   = std::numeric_limits< double >::infinity() ;
 
 			/*
@@ -173,7 +133,7 @@ namespace algorithm {
 			const_marker_visited_iterator it  = index.lower_bound(false);
 			const_marker_visited_iterator end = index.upper_bound(false);
 			for ( ; it != end; ++it ){
-				const marker_t & marker = *it ;
+				const node_t & marker = *it ;
 				BOOST_ASSERT( ! marker.visited ) ;
 
 				if ( marker.cost < cost ){
@@ -203,21 +163,21 @@ namespace algorithm {
 		inline const_marker_iterator reached_begin() const { return _markers.template get<0>().begin() ; }
 		inline marker_iterator       reached_end() { return _markers.template get<0>().end() ; }
 		inline const_marker_iterator reached_end() const { return _markers.template get<0>().end() ; }
+
+
 	private:
 		Graph & _graph ;
 
 		/**
 		 * @brief store reached vertices
 		 */
-		marker_set _markers ;
+		node_set _markers ;
 		/**
 		 * @brief the root of the tree
 		 */
-		vertex_handle _root ;
+		vertex_descriptor _root ;
 	};
 
 
 } // namespace algorithm
 } // namespace graph
-
-#endif

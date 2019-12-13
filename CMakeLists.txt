@@ -9,9 +9,6 @@ include_directories(
 )
 
 add_library(egraph
-    src/egraph/Store.cpp
-    src/egraph/LineString.cpp
-    src/egraph/Point.cpp
     src/egraph/OGRGraph.cpp
     src/egraph/helper/ogr.cpp
 )
@@ -20,24 +17,7 @@ target_link_libraries(egraph
     CGAL
 )
 
-add_executable(demo-boost app/demo-boost.cpp)
+add_subdirectory(app)
 
-add_executable(demo-store app/demo-store.cpp)
-target_link_libraries(demo-store
-    egraph
-)
-
-add_executable(demo-dijkstra app/demo-dijkstra.cpp)
-target_link_libraries(demo-dijkstra
-    egraph
-)
-
-add_executable(demo-shared app/demo-shared.cpp)
-target_link_libraries(demo-shared
-    egraph
-)
-
-add_executable(demo-ogr app/demo-ogr.cpp)
-target_link_libraries(demo-ogr
-    egraph
-)
+enable_testing()
+add_subdirectory(tests)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <boost/graph/adjacency_list.hpp>
+#include <egraph/Graph.h>
 
 class GDALDataset;
 class OGRLayer;
@@ -11,10 +11,7 @@ namespace egraph {
 
     typedef OGRFeature* OGRFeaturePtr;
 
-    using OGRFeatureGraph = boost::adjacency_list<
-        boost::listS,              /* stable identifiers */
-        boost::listS,              /* parallel edges allowed + stable identifiers */
-        boost::bidirectionalS,
+    using OGRFeatureGraph = Graph<
         OGRFeaturePtr,             /* vertex properties */
         OGRFeaturePtr              /* edge properties */
     >;

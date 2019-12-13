@@ -13,7 +13,7 @@ namespace egraph {
         int source ;
         /* target id */
         int target ;
-        /* direction (-1, 0 or 1)*/
+        /* direction */
         Direction direction ;
         /* geometry */
         LineString geom;

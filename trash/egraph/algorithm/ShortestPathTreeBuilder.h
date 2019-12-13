@@ -1,5 +1,4 @@
-#ifndef _EGRAPH_ALGORITHM_SHORTESTPATHTREEBUILDER_H_
-#define _EGRAPH_ALGORITHM_SHORTESTPATHTREEBUILDER_H_
+#pragma once
 
 #include <limits>
 
@@ -16,11 +15,11 @@ namespace algorithm {
 	template < typename Graph >
 	class ShortestPathTreeBuilder {
 	public:
-		typedef typename Graph::vertex_handle vertex_handle ;
-		typedef typename Graph::directed_edge directed_edge ;
+        typedef typename boost::graph_traits<Graph>::vertex_descriptor vertex_descriptor;
+        typedef typename boost::graph_traits<Graph>::edge_descriptor   edge_descriptor;
 
-		typedef ShortestPathTree< Graph >      tree_t ;
-		typedef typename tree_t::marker_t      marker_t ;
+		typedef ShortestPathTree< Graph >    tree_t ;
+		typedef typename tree_t::node_t      node_t ;
 
 		/**
 		 * @brief constructor with a graph
@@ -36,11 +35,11 @@ namespace algorithm {
 		/**
 		 * @brief build the shortest path tree from a root vertex
 		 */
-		void buildTree( vertex_handle root ){
+		void buildTree( vertex_descriptor root ){
 			_tree.setRoot( root );
 
 			// find the next vertex to visit
-			vertex_handle current = NULL ;
+			vertex_descriptor current = NULL ;
 			while ( ( current = findNextVertex() ) != NULL ) {
 				// break if maxCost is reached
 				if ( _tree.marker( current ).cost > _maxCost ){
@@ -57,23 +56,23 @@ namespace algorithm {
 		/**
 		 * @brief visit a vertex
 		 */
-		void visitVertex( vertex_handle visitedVertex ){
+		void visitVertex( vertex_descriptor visitedVertex ){
 			// reach each posible vertex from visitedVertex
 			std::vector< directed_edge > edges = visitedVertex->incidentEdges() ;
 
-			marker_t visitedMarker = _tree.marker( visitedVertex ) ;
+			node_t visitedMarker = _tree.marker( visitedVertex ) ;
 
 			for ( size_t i = 0; i < edges.size(); i++ ){
 				const directed_edge & edge = edges[i] ;
 
-				vertex_handle reachedVertex = edge.target() ;
+				vertex_descriptor reachedVertex = edge.target() ;
 				double newCost = visitedMarker.cost + concept::cost( edge.handle->properties() );
 				if ( ! _tree.isReached( reachedVertex ) ){
 					//first reach
-					_tree.setMarker( marker_t( reachedVertex, newCost, edge ) );
+					_tree.setMarker( node_t( reachedVertex, newCost, edge ) );
 				}else{
 					//is better?
-					marker_t reachedMarker = _tree.marker( reachedVertex );
+					node_t reachedMarker = _tree.marker( reachedVertex );
 					if ( newCost < reachedMarker.cost ){
 						reachedMarker.cost = newCost ;
 						reachedMarker.reachingEdge = edge ;
@@ -92,7 +91,7 @@ namespace algorithm {
 		 *
 		 * @return the vertex handle, NULL if not found
 		 */
-		vertex_handle findNextVertex() const {
+		vertex_descriptor findNextVertex() const {
 			return _tree.findNearestAndNotVisitedVertex() ;
 		}
 
@@ -117,17 +116,17 @@ namespace algorithm {
 			_maxCost = maxCost ;
 		}
 
-		vertex_handle targetVertex() {
+		vertex_descriptor targetVertex() {
 			return _targetVertex ;
 		}
-		void setTargetVertex( vertex_handle targetVertex ){
+		void setTargetVertex( vertex_descriptor targetVertex ){
 			_targetVertex = targetVertex ;
 		}
 
 	private:
 		ShortestPathTree< Graph > _tree ;
 		double _maxCost ;
-		vertex_handle _targetVertex ;
+		vertex_descriptor _targetVertex ;
 	};
 
 
