@@ -1,5 +1,4 @@
-#ifndef _EGRAPH_CONCEPT_COST_H_
-#define _EGRAPH_CONCEPT_COST_H_
+#pragma once
 
 namespace egraph {
 namespace concept {
@@ -11,6 +10,7 @@ namespace concept {
 	double cost( const Properties & properties ){
 		return properties.cost ;
 	}
+
 	/**
 	 * @brief default weight getter implementation
 	 */
@@ -21,6 +21,3 @@ namespace concept {
 
 } // namespace concept
 } // namespace egraph
-
-#endif
-

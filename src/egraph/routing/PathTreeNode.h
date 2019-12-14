@@ -4,7 +4,7 @@
 #include <boost/graph/graph_traits.hpp>
 
 namespace egraph {
-namespace algorithm {
+namespace routing {
 
     /**
      * @brief a node in shortest path tree
@@ -27,6 +27,13 @@ namespace algorithm {
             visited(false)
         {
 
+        }
+
+        /**
+         * @brief indicate if node has reaching edge
+         */
+        bool isRoot() const {
+            return ! reachingEdge.is_initialized() ;
         }
 
         /**
@@ -54,5 +61,5 @@ namespace algorithm {
         bool          visited ;
     } ;
 
-} // namespace algorithm
+} // namespace routing
 } // namespace egraph

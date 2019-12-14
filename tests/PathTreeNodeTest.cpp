@@ -2,10 +2,10 @@
 #include <boost/test/unit_test.hpp>
 
 #include <egraph/Graph.h>
-#include <egraph/algorithm/PathTreeNode.h>
+#include <egraph/routing/PathTreeNode.h>
 
 using namespace egraph ;
-using namespace egraph::algorithm ;
+using namespace egraph::routing ;
 
 typedef Graph<int,double> graph_t;
 

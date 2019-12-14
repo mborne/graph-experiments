@@ -6,7 +6,7 @@ namespace egraph {
 
     template < typename VertexProperties, typename EdgeProperties >
     using Graph = boost::adjacency_list<
-        boost::listS,              /* stable identifiers */
+        boost::listS,              /* non stable identifiers */
         boost::listS,              /* parallel edges allowed + stable identifiers */
         boost::bidirectionalS,     /* in and out edges */
         VertexProperties,          /* vertex properties */

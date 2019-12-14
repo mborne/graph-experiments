@@ -2,11 +2,11 @@
 #include <boost/test/unit_test.hpp>
 
 #include <egraph/Graph.h>
-#include <egraph/algorithm/PathTree.h>
+#include <egraph/routing/PathTree.h>
 #include <cassert>
 
 using namespace egraph ;
-using namespace egraph::algorithm ;
+using namespace egraph::routing ;
 
 typedef Graph<std::string,double> graph_t;
 typedef graph_t::vertex_descriptor vertex_descriptor;

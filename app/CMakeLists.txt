@@ -8,7 +8,7 @@ target_link_libraries(demo-ogr
     egraph
 )
 
-# add_executable(demo-dijkstra demo-dijkstra.cpp)
-# target_link_libraries(demo-dijkstra
-#     egraph
-# )
+add_executable(demo-dijkstra demo-dijkstra.cpp)
+target_link_libraries(demo-dijkstra
+    egraph
+)
