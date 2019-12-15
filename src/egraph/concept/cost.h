@@ -1,23 +1,32 @@
 #pragma once
 
+#include <egraph/FeatureGraph.h>
+
 namespace egraph {
 namespace concept {
 
 	/**
-	 * @brief default weight getter implementation
+	 * @brief default cost implementation
 	 */
 	template < typename Properties >
-	double cost( const Properties & properties ){
+	inline double cost( const Properties & properties ){
 		return properties.cost ;
 	}
 
 	/**
-	 * @brief default weight getter implementation
+	 * @brief cost implementation when cost is the single edge property
 	 */
 	template <>
-	double cost( const double & properties ){
+	inline double cost( const double & properties ){
 		return properties ;
 	}
+
+	/**
+	 * @brief feature implementation (either "cost" value or geometry length)
+	 */
+	template <>
+	double cost( const FeaturePtr & properties);
+
 
 } // namespace concept
 } // namespace egraph

@@ -1,4 +1,4 @@
-#include <egraph/OGRGraph.h>
+#include <egraph/FeatureGraphLoader.h>
 
 #include <egraph/helper/ogr.h>
 
@@ -12,7 +12,7 @@ namespace egraph {
 ///
 ///
 ///
-OGRGraph::OGRGraph(
+FeatureGraphLoader::FeatureGraphLoader(
     const std::string& path,
     const std::string& vertexLayerName,
     const std::string& edgeLayerName
@@ -26,7 +26,7 @@ OGRGraph::OGRGraph(
 ///
 ///
 ///
-OGRGraph::~OGRGraph()
+FeatureGraphLoader::~FeatureGraphLoader()
 {
     GDALClose(this->dataset);
 }
@@ -34,27 +34,11 @@ OGRGraph::~OGRGraph()
 ///
 ///
 ///
-int OGRGraph::getNumVertices() const
+FeatureGraph FeatureGraphLoader::getFeatureGraph() const
 {
-    return this->vertexLayer->GetFeatureCount();
-}
+    typedef FeatureGraph::vertex_descriptor vertex_descriptor;
 
-///
-///
-///
-int OGRGraph::getNumEdges() const 
-{
-    return this->edgeLayer->GetFeatureCount();
-}
-
-///
-///
-///
-OGRFeatureGraph OGRGraph::getFeatureGraph() const
-{
-    typedef OGRFeatureGraph::vertex_descriptor vertex_descriptor;
-
-    OGRFeatureGraph graph;
+    FeatureGraph graph;
 
     std::map< int, vertex_descriptor > mapVertices;
     /* read vertices */

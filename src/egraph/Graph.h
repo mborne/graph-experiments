@@ -4,6 +4,9 @@
 
 namespace egraph {
 
+    /**
+     * @brief alias for boost::adjacency_list for general use graph
+     */
     template < typename VertexProperties, typename EdgeProperties >
     using Graph = boost::adjacency_list<
         boost::listS,              /* non stable identifiers */

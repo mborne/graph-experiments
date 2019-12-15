@@ -9,15 +9,16 @@ include_directories(
 )
 
 add_library(egraph
-    src/egraph/OGRGraph.cpp
+    src/egraph/FeatureGraphLoader.cpp
     src/egraph/helper/ogr.cpp
+    src/egraph/concept/cost.cpp
 )
 target_link_libraries(egraph
     gdal
     CGAL
 )
 
-add_subdirectory(app)
+add_subdirectory(example)
 
 enable_testing()
 add_subdirectory(tests)
