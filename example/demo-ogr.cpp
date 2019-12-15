@@ -1,12 +1,11 @@
 #include <iostream>
 #include <fstream>
+#include <chrono>
 
 #include <egraph/FeatureGraphLoader.h>
-#include <egraph/concept/cost.h>
-
 #include <egraph/routing/PathTreeBuilder.h>
 
-#include <gdal/ogrsf_frmts.h>
+#include <egraph/helper/csv.h>
 
 using namespace egraph;
 
@@ -38,37 +37,14 @@ int main(int argc, char* argv[]){
     std::cout << "Dump vertices with informations to vertices.csv ..." << std::endl;
     {
         std::ofstream ofs("vertices.csv");
-        ofs << "id,in_degree,out_degree" << std::endl;
-        FeatureGraph::vertex_iterator it,end;
-        for ( boost::tie(it,end) = boost::vertices(graph); it != end; ++it ){
-            FeatureGraph::vertex_descriptor vertex = *it;
-            FeaturePtr feature = graph[vertex];
-
-            // writes infos to CSV
-            ofs << feature->GetFID() ;
-            ofs << "," << boost::in_degree(vertex,graph);
-            ofs << "," << boost::out_degree(vertex,graph);
-            ofs << std::endl;
-        }
+        helper::verticesToCSV(ofs,graph);
     }
 
     /* display edges */
     std::cout << "Dump edges with informations to edges.csv ..." << std::endl;
     {
         std::ofstream ofs("edges.csv");
-        ofs << "id,source,target,cost" << std::endl;
-        FeatureGraph::edge_iterator it,end;
-        for ( boost::tie(it,end) = boost::edges(graph); it != end; ++it ){
-            FeatureGraph::edge_descriptor edge = *it;
-            FeaturePtr feature = graph[edge];
-
-            // writes infos to CSV
-            ofs << feature->GetFID();
-            ofs << "," << feature->GetFieldAsInteger("source") ;
-            ofs << "," << feature->GetFieldAsInteger("target") ;
-            ofs << "," << concept::cost(feature) ;
-            ofs << std::endl;
-        }
+        helper::edgesToCSV(ofs,graph);
     }
 
     /* build path trees for some vertex */
@@ -76,13 +52,25 @@ int main(int argc, char* argv[]){
         FeatureGraph::vertex_iterator it,end;
         for ( boost::tie(it,end) = boost::vertices(graph); it != end; ++it ){
             FeatureGraph::vertex_descriptor origin = *it;
-            FeaturePtr feature = graph[origin];
+            int originId = concept::fid( graph[origin] );
+            std::cout << "build path tree from " << originId << "..." << std::endl;
 
-            std::cout << "build path tree from " << feature->GetFID() << "..." << std::endl;
+            auto start = std::chrono::system_clock::now();
             routing::PathTree<FeatureGraph> pathTree(graph);
             pathTree.setRoot(origin);
             routing::PathTreeBuilder<FeatureGraph> pathTreeBuilder(pathTree);
             pathTreeBuilder.build();
+            auto end  = std::chrono::system_clock::now();
+
+            auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end-start);
+            std::cout << "elapsed " << originId << " : " << elapsed.count() << " s" << std::endl;
+
+            std::string ofsName("distance-from-");
+            ofsName += std::to_string(originId);
+            ofsName += ".csv";
+            std::cout << "save result to " << ofsName << std::endl;
+            std::ofstream ofs(ofsName.c_str());
+            helper::pathTreeToCSV(ofs,pathTree);
         }
     }
 

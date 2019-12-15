@@ -11,7 +11,10 @@ include_directories(
 add_library(egraph
     src/egraph/FeatureGraphLoader.cpp
     src/egraph/helper/ogr.cpp
+
     src/egraph/concept/cost.cpp
+    src/egraph/concept/reverseCost.cpp
+    src/egraph/concept/fid.cpp
 )
 target_link_libraries(egraph
     gdal

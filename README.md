@@ -14,10 +14,15 @@ make
 make test
 ```
 
-## Usage
+## Examples
+
+* [example/demo-boost.cpp](example/demo-boost.cpp) : How to use `boost::graph`
+* [example/demo-dijkstra.cpp](example/demo-dijkstra.cpp) : Shortest path computation
 
 ```bash
-app/demo-ogr "PG:dbname=gis" "graph.vertex" "graph.edge"
+example/demo-ogr "PG:dbname=gis" "graph.vertex" "graph.edge"
+# or
+example/demo-ogr "PG:dbname=gis" "graph.vertex" "graph.edge_distance_weighted"
 ```
 
 ## TODO
@@ -28,4 +33,5 @@ app/demo-ogr "PG:dbname=gis" "graph.vertex" "graph.edge"
 * Add `egraph::csv::escape(s): std::string` to manage `"` if needed
 * Add `egraph::csv::writeGraph(ostream,graph)` with WKT column
 * Add `egraph::csv::writeReachingCost(ostream,pathTree)`
+
 

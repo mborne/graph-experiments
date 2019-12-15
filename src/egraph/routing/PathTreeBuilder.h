@@ -5,7 +5,7 @@
 
 #include <egraph/routing/PathTree.h>
 #include <egraph/concept/cost.h>
-
+#include <egraph/concept/reverseCost.h>
 
 namespace egraph {
 namespace routing {
@@ -15,8 +15,8 @@ class PathTreeBuilder {
 public:
     typedef typename boost::graph_traits<G>::vertex_descriptor  vertex_descriptor;
     typedef typename boost::graph_traits<G>::edge_descriptor    edge_descriptor;
-    typedef typename boost::graph_traits<G>::in_edge_iterator   in_edge_iterator;
     typedef typename boost::graph_traits<G>::out_edge_iterator  out_edge_iterator;
+    typedef typename boost::graph_traits<G>::in_edge_iterator   in_edge_iterator;
 
     typedef typename PathTree<G>::node_type                     node_type;
 
@@ -71,7 +71,34 @@ public:
             for ( boost::tie(it,end) = boost::out_edges(vertex,g); it != end; ++it ){
                 edge_descriptor edge = *it;
                 vertex_descriptor reached = boost::target(edge,g);
-                double newCost = visitedNode.cost + concept::cost(g[edge]);
+
+                double directCost = concept::cost(g[edge]);
+                if ( directCost < 0.0 ){
+                    continue;
+                }
+                double newCost = visitedNode.cost + directCost;
+                if ( ( ! _pathTree.isReached(reached) ) || newCost < _pathTree.node(reached).cost ){
+                    node_type node(reached,newCost);
+                    node.reachingEdge = edge;
+                    node.visited = false;
+                    _pathTree.setNode(node);
+                }
+            }
+        }
+
+
+        /* visit in edges */
+        {
+            in_edge_iterator it,end;
+            for ( boost::tie(it,end) = boost::in_edges(vertex,g); it != end; ++it ){
+                edge_descriptor edge = *it;
+                vertex_descriptor reached = boost::source(edge,g);
+
+                double reverseCost = concept::reverseCost(g[edge]);
+                if ( reverseCost < 0.0 ){
+                    continue;
+                }
+                double newCost = visitedNode.cost + reverseCost;
                 if ( ( ! _pathTree.isReached(reached) ) || newCost < _pathTree.node(reached).cost ){
                     node_type node(reached,newCost);
                     node.reachingEdge = edge;
