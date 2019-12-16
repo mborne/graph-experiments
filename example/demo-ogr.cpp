@@ -49,8 +49,9 @@ int main(int argc, char* argv[]){
 
     /* build path trees for some vertex */
     {
+        int count = 0;
         FeatureGraph::vertex_iterator it,end;
-        for ( boost::tie(it,end) = boost::vertices(graph); it != end; ++it ){
+        for ( boost::tie(it,end) = boost::vertices(graph); it != end && count < 5; ++it, ++count ){
             FeatureGraph::vertex_descriptor origin = *it;
             int originId = concept::fid( graph[origin] );
             std::cout << "build path tree from " << originId << "..." << std::endl;

@@ -39,6 +39,9 @@ public:
 
     /**
      * @brief Find next vertex to visit (dijkstra implementation)
+     *
+     * TODO optimize using a stack: map<double,vertex_descriptor> for non
+     * visited vertices to avoid sec scan to sort by distance
      */
     boost::optional<vertex_descriptor> findNextVertex() const {
         boost::optional<vertex_descriptor> result;
