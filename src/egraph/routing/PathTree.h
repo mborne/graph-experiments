@@ -34,7 +34,7 @@ public:
 	typedef PathTreeNode<G> node_type;
 
 	/**
-	 * A set of PathTreeNode with index on visited and cost
+	 * @brief A set of PathTreeNode with an additional index on (visited,cost) pair
 	 */
 	typedef typename boost::multi_index_container<
 		node_type,

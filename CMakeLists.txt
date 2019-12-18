@@ -15,6 +15,7 @@ add_library(egraph
     src/egraph/concept/cost.cpp
     src/egraph/concept/reverseCost.cpp
     src/egraph/concept/fid.cpp
+    src/egraph/concept/wkt.cpp
 )
 target_link_libraries(egraph
     gdal

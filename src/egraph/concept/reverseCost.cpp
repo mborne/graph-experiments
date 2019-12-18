@@ -11,7 +11,7 @@ namespace concept {
 template <>
 double reverseCost( const FeaturePtr & properties)
 {
-    int indexCost = properties->GetDefnRef()->GetFieldIndex("reverseCost");
+    int indexCost = properties->GetDefnRef()->GetFieldIndex("reverse_cost");
     if ( indexCost < 0 ){
         OGRGeometry * g = properties->GetGeometryRef();
         if ( g != NULL ){

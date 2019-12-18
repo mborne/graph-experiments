@@ -7,6 +7,8 @@
 
 #include <egraph/helper/csv.h>
 
+#define NUM_TREES 20
+
 using namespace egraph;
 
 int main(int argc, char* argv[]){
@@ -51,7 +53,7 @@ int main(int argc, char* argv[]){
     {
         int count = 0;
         FeatureGraph::vertex_iterator it,end;
-        for ( boost::tie(it,end) = boost::vertices(graph); it != end && count < 5; ++it, ++count ){
+        for ( boost::tie(it,end) = boost::vertices(graph); it != end && count < NUM_TREES; ++it, ++count ){
             FeatureGraph::vertex_descriptor origin = *it;
             int originId = concept::fid( graph[origin] );
             std::cout << "build path tree from " << originId << "..." << std::endl;

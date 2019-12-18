@@ -16,8 +16,9 @@ make test
 
 ## Examples
 
-* [example/demo-boost.cpp](example/demo-boost.cpp) : How to use `boost::graph`
+* [example/demo-boost.cpp](example/demo-boost.cpp) : Some notes to use `boost::graph`
 * [example/demo-dijkstra.cpp](example/demo-dijkstra.cpp) : Shortest path computation
+* [example/demo-ogr.cpp](example/demo-ogr.cpp) : Load `FeatureGraph` using GDAL/OGR and compute some `ShortestPathTree`
 
 ```bash
 example/demo-ogr "PG:dbname=gis" "graph.vertex" "graph.edge"
@@ -25,10 +26,7 @@ example/demo-ogr "PG:dbname=gis" "graph.vertex" "graph.edge"
 example/demo-ogr "PG:dbname=gis" "graph.vertex" "graph.edge_distance_weighted"
 ```
 
-## TODO
-
-* [ ] Add `concept::wkt(...): std::string`
-* [ ] Add `egraph::csv::escape(s): std::string` to manage `"` if needed
+![Dijkstra shortest path tree](img/path-tree-1.png)
 
 ## Performance debug
 
