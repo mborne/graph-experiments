@@ -34,7 +34,7 @@ graph_t::vertex_descriptor findVertex( const std::string & name, const graph_t &
             return *it;
         }
     }
-    assert(false);
+    BOOST_FAIL("vertex not found!");
 }
 
 BOOST_AUTO_TEST_SUITE( PathTreeBuilderTest )

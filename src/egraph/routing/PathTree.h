@@ -14,6 +14,7 @@
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/member.hpp>
 #include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index/composite_key.hpp>
 
 namespace egraph
 {
@@ -33,15 +34,21 @@ public:
 	typedef PathTreeNode<G> node_type;
 
 	/**
-	 * A set of nodes indexed according "node.visited"
+	 * A set of PathTreeNode with index on visited and cost
 	 */
 	typedef typename boost::multi_index_container<
 		node_type,
 		boost::multi_index::indexed_by<
-			// sort by item::operator<
+			/* index by identity ( < operator ) */
 			boost::multi_index::ordered_unique<boost::multi_index::identity<node_type>>,
-			// sort by less<bool> on visited
-			boost::multi_index::ordered_non_unique<boost::multi_index::member<node_type, bool, &node_type::visited>>
+			/* index by (visited,cost) */
+			boost::multi_index::ordered_non_unique<
+				boost::multi_index::composite_key<
+					node_type,
+					boost::multi_index::member< node_type, bool, &node_type::visited>,
+					boost::multi_index::member< node_type, double, &node_type::cost>
+				>
+			>
 		>
 	> node_set;
 
@@ -162,20 +169,28 @@ public:
 
 	inline not_visited_iterator not_visited_begin()
 	{
-		return _nodes.template get<1>().lower_bound(false);
+		return _nodes.template get<1>().lower_bound(
+			std::make_tuple(false,0.0)
+		);
 	}
 	inline const_not_visited_iterator not_visited_begin() const
 	{
-		return _nodes.template get<1>().lower_bound(false);
+		return _nodes.template get<1>().lower_bound(
+			std::make_tuple(false,0.0)
+		);
 	}
 
 	inline not_visited_iterator not_visited_end()
 	{
-		return _nodes.template get<1>().upper_bound(false);
+		return _nodes.template get<1>().upper_bound(
+			std::make_tuple(false,std::numeric_limits<double>::infinity())
+		);
 	}
 	inline const_not_visited_iterator not_visited_end() const
 	{
-		return _nodes.template get<1>().upper_bound(false);
+		return _nodes.template get<1>().upper_bound(
+			std::make_tuple(false,std::numeric_limits<double>::infinity())
+		);
 	}
 
 private:

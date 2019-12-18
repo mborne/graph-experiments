@@ -39,23 +39,25 @@ public:
 
     /**
      * @brief Find next vertex to visit (dijkstra implementation)
-     *
-     * TODO optimize using a stack: map<double,vertex_descriptor> for non
-     * visited vertices to avoid sec scan to sort by distance
      */
     boost::optional<vertex_descriptor> findNextVertex() const {
         boost::optional<vertex_descriptor> result;
-        double minCost   = std::numeric_limits< double >::infinity() ;
 
         auto it  = _pathTree.not_visited_begin();
         auto end = _pathTree.not_visited_end();
-        for ( ; it != end; ++it ){
-            BOOST_ASSERT( ! it->visited ) ;
-            if ( it->cost < minCost ){
-                result = it->vertex ;
-                minCost = it->cost ;
-            }
+
+        /* indexed by cost, first is least cost */
+        if ( it != end ){
+            result = it->vertex;
         }
+        // double minCost   = std::numeric_limits< double >::infinity() ;
+        // for ( ; it != end; ++it ){
+        //     BOOST_ASSERT( ! it->visited ) ;
+        //     if ( it->cost < minCost ){
+        //         result = it->vertex ;
+        //         minCost = it->cost ;
+        //     }
+        // }
 
         return result ;
     }

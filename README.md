@@ -27,7 +27,6 @@ example/demo-ogr "PG:dbname=gis" "graph.vertex" "graph.edge_distance_weighted"
 
 ## TODO
 
-* [ ] Optimize `PathTreeBuilder::findNextVertex`
 * [ ] Add `concept::wkt(...): std::string`
 * [ ] Add `egraph::csv::escape(s): std::string` to manage `"` if needed
 
