@@ -3,8 +3,10 @@ FROM debian:10
 #--------------------------------------------
 # install build dependencies
 #--------------------------------------------
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     cmake \
+    clang \
+    make \
     libboost-graph-dev \
     libgdal-dev \
  && rm -rf /var/lib/apt/lists/*

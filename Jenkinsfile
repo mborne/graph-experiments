@@ -14,7 +14,7 @@ pipeline {
                         /* publish reports */
                         junit 'junit.xml'
                     }
-
+                    /* WARNING : fat image */
                     // docker.withRegistry("${DOCKER_REGISTRY_URL}","${DOCKER_REGISTRY_CREDENTIAL_ID}") {
                     //     customImage.push("latest")
                     // }
