@@ -10,6 +10,7 @@
 #define NUM_TREES 20
 
 using namespace egraph;
+using namespace egraph::routing;
 
 int main(int argc, char* argv[]){
     /* show help */
@@ -52,21 +53,21 @@ int main(int argc, char* argv[]){
     /* build path trees for some vertex */
     {
         int count = 0;
-        FeatureGraph::vertex_iterator it,end;
-        for ( boost::tie(it,end) = boost::vertices(graph); it != end && count < NUM_TREES; ++it, ++count ){
+        for ( auto [it,end] = boost::vertices(graph); it != end && count < NUM_TREES; ++it, ++count ){
             FeatureGraph::vertex_descriptor origin = *it;
             int originId = concept::fid( graph[origin] );
             std::cout << "build path tree from " << originId << "..." << std::endl;
 
-            auto start = std::chrono::system_clock::now();
-            routing::PathTree<FeatureGraph> pathTree(graph);
+            auto startTime = std::chrono::system_clock::now();
+            PathTree<FeatureGraph> pathTree(graph);
             pathTree.setRoot(origin);
-            routing::PathTreeBuilder<FeatureGraph> pathTreeBuilder(pathTree);
+            PathTreeBuilder<FeatureGraph> pathTreeBuilder(pathTree);
             pathTreeBuilder.build();
-            auto end  = std::chrono::system_clock::now();
 
-            auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end-start);
-            std::cout << "elapsed " << originId << " : " << elapsed.count() << " s" << std::endl;
+            auto elapsedTime = std::chrono::duration_cast<std::chrono::seconds>(
+                std::chrono::system_clock::now()-startTime
+            );
+            std::cout << "elapsed " << originId << " : " << elapsedTime.count() << "s" << std::endl;
 
             std::string ofsName("distance-from-");
             ofsName += std::to_string(originId);

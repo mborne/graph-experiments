@@ -5,7 +5,8 @@ pipeline {
         stage('mborne/graph-experiments:latest') {
             steps {
                 script {
-                    def build_args = "--pull --no-cache ";
+                    def build_args = "";
+                    //build_args += "--pull --no-cache ";
 
                     def customImage = docker.build('mborne/graph-experiments:latest'," ${build_args} .")
                     customImage.inside {

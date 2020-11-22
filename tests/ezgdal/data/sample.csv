@@ -1,0 +1,3 @@
+id,name,WKT
+2,Point 1,"POINT(5.0 44.0)"
+3,LineString 1,"LINESTRING(5.0 44.0,6.0 45.0)"
