@@ -1,25 +1,26 @@
 project(DemoBoostGraph)
 cmake_minimum_required(VERSION 2.8)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(GDAL "2.3.0" REQUIRED)
+find_package(Boost COMPONENTS graph REQUIRED)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/src
+    ${GDAL_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIRS}
 )
+
+file(GLOB_RECURSE EGRAPH_SOURCES src/*.cpp)
 
 add_library(egraph
-    src/egraph/FeatureGraphLoader.cpp
-    src/egraph/helper/ogr.cpp
-
-    src/egraph/concept/cost.cpp
-    src/egraph/concept/reverseCost.cpp
-    src/egraph/concept/fid.cpp
-    src/egraph/concept/wkt.cpp
+    ${EGRAPH_SOURCES}
 )
 target_link_libraries(egraph
-    gdal
-    CGAL
+    ${GDAL_LIBRARY}
+    ${Boost_LIBRARIES}
 )
 
 add_subdirectory(example)

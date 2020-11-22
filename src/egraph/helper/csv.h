@@ -15,27 +15,7 @@ namespace helper {
     /**
      * @brief escape string to CSV using double quotes if needed
      */
-    std::string escapeCSV(const std::string & s){
-        bool quoted = false;
-
-        std::ostringstream os;
-        for ( const char & c : s ){
-            if ( c == '"' ){
-                os << "\"\"" ;
-                quoted = true;
-            }else if ( c == ',' ){
-                os << c ;
-                quoted = true;
-            }else{
-                os << c ;
-            }
-        }
-        if ( quoted ){
-            return std::string("\"")+os.str()+std::string("\"");
-        }else{
-            return os.str();
-        }
-    }
+    std::string escapeCSV(const std::string & s) ;
 
     /**
      * @brief write vertices with informations to CSV
@@ -105,7 +85,6 @@ namespace helper {
             // writes infos to CSV
             os << concept::fid( graph[vertex] ) ;
             os << "," << cost ;
-            //os << "," << escapeCSV(concept::wkt(graph[vertex]));
             if ( it->isRoot() ){
                 os << "," << escapeCSV("GEOMETRYCOLLECTION EMPTY");
             }else{

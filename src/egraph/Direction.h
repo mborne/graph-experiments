@@ -3,7 +3,7 @@
 namespace egraph {
 
     /**
-     * Direction along an edge
+     * @brief A direction along an edge
      */
 	typedef enum {
 		INVERSE = -1,

@@ -1,4 +1,3 @@
-#define BOOST_TEST_MODULE CsvTest
 #include <boost/test/unit_test.hpp>
 
 #include <egraph/helper/csv.h>

@@ -9,7 +9,7 @@ class OGRFeature;
 
 namespace egraph {
 
-    typedef OGRFeature* FeaturePtr;
+    typedef std::shared_ptr<OGRFeature> FeaturePtr;
 
     /**
      * @brief a Graph where vertex and edges are OGR features

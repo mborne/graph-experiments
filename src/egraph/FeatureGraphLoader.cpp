@@ -1,6 +1,6 @@
 #include <egraph/FeatureGraphLoader.h>
 
-#include <egraph/helper/ogr.h>
+#include <ezgdal/ezgdal.h>
 
 #include <gdal/ogrsf_frmts.h>
 
@@ -13,28 +13,19 @@ namespace egraph {
 ///
 ///
 FeatureGraphLoader::FeatureGraphLoader(
-    const std::string& path,
-    const std::string& vertexLayerName,
-    const std::string& edgeLayerName
+    const std::string& path
 )
 {
-    this->dataset     = helper::openDataset(path);
-    this->vertexLayer = helper::getLayerByName(this->dataset,vertexLayerName);
-    this->edgeLayer   = helper::getLayerByName(this->dataset,edgeLayerName);
+    this->dataset = ezgdal::openVectorDataset(path);
 }
 
 ///
 ///
 ///
-FeatureGraphLoader::~FeatureGraphLoader()
-{
-    GDALClose(this->dataset);
-}
-
-///
-///
-///
-FeatureGraph FeatureGraphLoader::getFeatureGraph() const
+FeatureGraph FeatureGraphLoader::getFeatureGraph(
+    const std::string& vertexLayerName,
+    const std::string& edgeLayerName
+) const
 {
     typedef FeatureGraph::vertex_descriptor vertex_descriptor;
 
@@ -43,42 +34,53 @@ FeatureGraph FeatureGraphLoader::getFeatureGraph() const
     std::map< int, vertex_descriptor > mapVertices;
     /* read vertices */
     {
-        OGRFeature *feature = vertexLayer->GetNextFeature();
-        while (feature != NULL){
+        OGRLayer* vertexLayer = ezgdal::getLayerByName(dataset.get(),vertexLayerName);
+        for (
+            OGRFeatureUniquePtr feature{vertexLayer->GetNextFeature()};
+            feature.get() != nullptr;
+            feature = OGRFeatureUniquePtr{vertexLayer->GetNextFeature()}
+        ){
             int id = feature->GetFID();
-            vertex_descriptor vertex = boost::add_vertex(feature,graph);
+            vertex_descriptor vertex = boost::add_vertex(
+                ezgdal::makeShared(feature.release()),
+                graph
+            );
             mapVertices.insert(std::make_pair(id,vertex));
-            feature = vertexLayer->GetNextFeature();
         }
     }
     /* read edges */
-    int indexSource = helper::getFieldIndex(edgeLayer,"source");
-    int indexTarget = helper::getFieldIndex(edgeLayer,"target");
-    {
-        OGRFeature *feature = edgeLayer->GetNextFeature();
-        while (feature != NULL){
-            // read source
-            vertex_descriptor source ;
-            {
-                auto it = mapVertices.find(feature->GetFieldAsInteger(indexSource));
-                if ( it == mapVertices.end() ){
-                    throw std::runtime_error("source vertex not found");
-                }
-                source = it->second;
+    OGRLayer* edgeLayer   = ezgdal::getLayerByName(dataset.get(),edgeLayerName);
+    int indexSource = ezgdal::getFieldIndex(edgeLayer,"source");
+    int indexTarget = ezgdal::getFieldIndex(edgeLayer,"target");
+    for (
+        OGRFeatureUniquePtr feature{edgeLayer->GetNextFeature()};
+        feature.get() != nullptr;
+        feature = OGRFeatureUniquePtr{edgeLayer->GetNextFeature()}
+    ){
+        /* retreive source by id */
+        vertex_descriptor source ;
+        {
+            auto it = mapVertices.find(feature->GetFieldAsInteger(indexSource));
+            if ( it == mapVertices.end() ){
+                throw std::runtime_error("source vertex not found");
             }
-            // read target
-            vertex_descriptor target ;
-            {
-                auto it = mapVertices.find(feature->GetFieldAsInteger(indexTarget));
-                if ( it == mapVertices.end() ){
-                    throw std::runtime_error("target vertex not found");
-                }
-                target = it->second;
-            }
-            boost::add_edge(source,target,feature,graph);
-
-            feature = edgeLayer->GetNextFeature();
+            source = it->second;
         }
+        /* retreive target by id */
+        vertex_descriptor target ;
+        {
+            auto it = mapVertices.find(feature->GetFieldAsInteger(indexTarget));
+            if ( it == mapVertices.end() ){
+                throw std::runtime_error("target vertex not found");
+            }
+            target = it->second;
+        }
+        boost::add_edge(
+            source,
+            target,
+            ezgdal::makeShared(feature.release()),
+            graph
+        );
     }
 
     return graph;

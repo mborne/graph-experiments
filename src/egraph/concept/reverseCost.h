@@ -6,7 +6,7 @@ namespace egraph {
 namespace concept {
 
 	/**
-	 * @brief default cost implementation
+	 * @brief default reverseCost implementation
 	 */
 	template < typename Properties >
 	inline double reverseCost( const Properties & properties ){

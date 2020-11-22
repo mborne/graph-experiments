@@ -1,14 +1,17 @@
-add_executable(demo-boost demo-boost.cpp)
-target_link_libraries(demo-boost
-    egraph
-)
+# to avoid warnings with <boost/progress.hpp>
+add_definitions(-DBOOST_ALLOW_DEPRECATED_HEADERS)
 
-add_executable(demo-ogr demo-ogr.cpp)
-target_link_libraries(demo-ogr
-    egraph
-)
+file(GLOB EGRAPH_EXAMPLE_SOURCES *.cpp)
 
-add_executable(demo-dijkstra demo-dijkstra.cpp)
-target_link_libraries(demo-dijkstra
-    egraph
-)
+foreach( EGRAPH_EXAMPLE_SOURCE ${EGRAPH_EXAMPLE_SOURCES} )
+    get_filename_component(  EGRAPH_EXAMPLE_NAME ${EGRAPH_EXAMPLE_SOURCE} NAME_WE )
+
+    add_executable(${EGRAPH_EXAMPLE_NAME}
+        ${EGRAPH_EXAMPLE_SOURCE}
+    )
+    target_link_libraries(${EGRAPH_EXAMPLE_NAME}
+        egraph
+        ${Boost_LIBRARIES}
+        ${GDAL_LIBRARY}
+    )
+endforeach()

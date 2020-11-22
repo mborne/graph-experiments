@@ -28,8 +28,8 @@ int main(int argc, char* argv[]){
 
     /* load a FeatureGraph with GDAL/OGR */
     std::cout << "Load graph vertex_layer=" << vertexLayerName << " edge_layer=" << edgeLayerName << " ..." << std::endl;
-    FeatureGraphLoader loader(path,vertexLayerName,edgeLayerName);
-    FeatureGraph graph = loader.getFeatureGraph();
+    FeatureGraphLoader loader(path);
+    FeatureGraph graph = loader.getFeatureGraph(vertexLayerName,edgeLayerName);
 
     /* display the number of vertices */
     std::cout << "Number of vertices : " << boost::num_vertices(graph) << std::endl;

@@ -1,26 +1,42 @@
-#include <egraph/helper/ogr.h>
-
-#include <gdal/ogrsf_frmts.h>
+#include <ezgdal/ezgdal.h>
 
 #include <sstream>
 #include <exception>
 
-namespace egraph {
-namespace helper {
+namespace ezgdal {
+
+/**
+ * invokes GDALAllRegister on the first call
+ */
+void ensureGDALIsInitialized(){
+    static bool initialized{false};
+    if ( ! initialized ){
+        GDALAllRegister();
+        initialized = true;
+    }
+}
 
 ///
 ///
 ///
-GDALDataset* openDataset(const std::string& path)
+std::shared_ptr<OGRFeature> makeShared(OGRFeature* feature)
 {
-    GDALAllRegister();
+    return std::shared_ptr<OGRFeature>(feature,&OGRFeature::DestroyFeature);
+}
+
+///
+///
+///
+GDALDatasetUniquePtr openVectorDataset(const std::string& path)
+{
+    ensureGDALIsInitialized();
     GDALDataset * dataset = (GDALDataset *)GDALOpenEx(path.c_str(), GDAL_OF_VECTOR, NULL, NULL, NULL);
     if (dataset == NULL){
         std::ostringstream oss;
         oss << "Fail to open dataset '" << path << "'" ;
         throw std::runtime_error(oss.str());
     }
-    return dataset;
+    return GDALDatasetUniquePtr(dataset);
 }
 
 ///
@@ -76,5 +92,4 @@ int getFieldIndex( OGRLayer *layer, const char* name, bool required )
 }
 
 
-} // namespace helper
-} // namespace egraph
+} // namespace ezgdal

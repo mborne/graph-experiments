@@ -1,4 +1,3 @@
-#define BOOST_TEST_MODULE PathTreeBuilderTest
 #include <boost/test/unit_test.hpp>
 
 #include <egraph/Graph.h>
@@ -6,48 +5,24 @@
 #include <egraph/routing/PathTreeBuilder.h>
 #include <cassert>
 
+#include "../TestGraph.h"
+
 using namespace egraph ;
 using namespace egraph::routing ;
-
-typedef Graph<std::string,double> graph_t;
-typedef graph_t::vertex_descriptor vertex_descriptor;
-typedef graph_t::edge_descriptor   edge_descriptor;
-
-graph_t createSampleGraph(){
-    graph_t g;
-    vertex_descriptor a = boost::add_vertex("A",g);
-    vertex_descriptor b = boost::add_vertex("B",g);
-    vertex_descriptor c = boost::add_vertex("C",g);
-    // A -> B
-    boost::add_edge(a,b,1.0,g);
-    // A -> C
-    boost::add_edge(a,c,2.0,g);
-    // B -> C
-    boost::add_edge(b,c,0.5,g);
-    return g;
-}
-
-graph_t::vertex_descriptor findVertex( const std::string & name, const graph_t & g ){
-    graph_t::vertex_iterator it,end;
-    for ( boost::tie(it,end) = boost::vertices(g); it != end; ++it ){
-        if ( g[*it] == name ){
-            return *it;
-        }
-    }
-    BOOST_FAIL("vertex not found!");
-}
 
 BOOST_AUTO_TEST_SUITE( PathTreeBuilderTest )
 
 BOOST_AUTO_TEST_CASE( testFindNextVertex )
 {
-    graph_t g = createSampleGraph();
+    using vertex_descriptor = TestGraph::vertex_descriptor;
+
+    TestGraph g = createSampleGraphA();
     vertex_descriptor a = findVertex("A",g);
     vertex_descriptor b = findVertex("B",g);
     vertex_descriptor c = findVertex("C",g);
 
-    PathTree<graph_t> pathTree(g);
-    PathTreeBuilder<graph_t> builder(pathTree);
+    PathTree<TestGraph> pathTree(g);
+    PathTreeBuilder<TestGraph> builder(pathTree);
     // pas de sommet à visité si pas de racine
     {
         boost::optional<vertex_descriptor> result = builder.findNextVertex();
@@ -66,14 +41,17 @@ BOOST_AUTO_TEST_CASE( testFindNextVertex )
 
 BOOST_AUTO_TEST_CASE( testBuildFull )
 {
-    graph_t g = createSampleGraph();
+    using vertex_descriptor = TestGraph::vertex_descriptor;
+    using edge_descriptor = TestGraph::edge_descriptor;
+
+    TestGraph g = createSampleGraphA();
     vertex_descriptor a = findVertex("A",g);
     vertex_descriptor b = findVertex("B",g);
     vertex_descriptor c = findVertex("C",g);
 
-    PathTree<graph_t> pathTree(g);
+    PathTree<TestGraph> pathTree(g);
     pathTree.setRoot(a);
-    PathTreeBuilder<graph_t> builder(pathTree);
+    PathTreeBuilder<TestGraph> builder(pathTree);
     builder.build();
 
     BOOST_CHECK(pathTree.isReached(a));

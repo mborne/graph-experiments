@@ -53,6 +53,17 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "algorithm": "cpp",
-        "memory": "cpp"
+        "memory": "cpp",
+        "string_view": "cpp",
+        "bit": "cpp",
+        "condition_variable": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "iterator": "cpp",
+        "memory_resource": "cpp",
+        "optional": "cpp",
+        "random": "cpp",
+        "mutex": "cpp",
+        "variant": "cpp"
     }
 }

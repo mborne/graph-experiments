@@ -1,4 +1,3 @@
-#define BOOST_TEST_MODULE PathTreeNodeTest
 #include <boost/test/unit_test.hpp>
 
 #include <egraph/Graph.h>

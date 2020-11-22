@@ -2,9 +2,7 @@
 
 #include <string>
 #include <egraph/FeatureGraph.h>
-
-class GDALDataset;
-class OGRLayer;
+#include <ezgdal/ezgdal.h>
 
 namespace egraph {
 
@@ -14,22 +12,23 @@ namespace egraph {
     class FeatureGraphLoader {
     public:
         FeatureGraphLoader(
-            const std::string& path = "PG:dbname=gis",
-            const std::string& vertexLayerName = "graph.vertex",
-            const std::string& edgeLayerName = "graph.edge"
+            const std::string& path = "PG:dbname=gis"
         );
 
-        ~FeatureGraphLoader();
+        FeatureGraphLoader( const FeatureGraphLoader & other ) = delete;
+
+        ~FeatureGraphLoader() = default;
 
         /**
          * Load FeatureGraph from dataset
          */
-        FeatureGraph getFeatureGraph() const ;
+        FeatureGraph getFeatureGraph(
+            const std::string& vertexLayerName = "graph.vertex",
+            const std::string& edgeLayerName = "graph.edge"
+        ) const ;
 
     private:
-        GDALDataset * dataset ;
-        OGRLayer* vertexLayer ;
-        OGRLayer* edgeLayer ;
+        GDALDatasetUniquePtr dataset ;
     };
 
 }
