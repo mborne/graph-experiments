@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(GDAL "2.3.0" REQUIRED)
-find_package(Boost COMPONENTS graph REQUIRED)
+find_package(Boost COMPONENTS program_options graph REQUIRED)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/src

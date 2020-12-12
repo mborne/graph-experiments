@@ -12,7 +12,7 @@ namespace egraph {
     class FeatureGraphLoader {
     public:
         FeatureGraphLoader(
-            const std::string& path = "PG:dbname=gis"
+            const std::string& path = "PG:dbname=gis active_schema=roadgraph"
         );
 
         FeatureGraphLoader( const FeatureGraphLoader & other ) = delete;
@@ -23,8 +23,8 @@ namespace egraph {
          * Load FeatureGraph from dataset
          */
         FeatureGraph getFeatureGraph(
-            const std::string& vertexLayerName = "graph.vertex",
-            const std::string& edgeLayerName = "graph.edge"
+            const std::string& vertexLayerName = "vertex",
+            const std::string& edgeLayerName = "edge"
         ) const ;
 
     private:

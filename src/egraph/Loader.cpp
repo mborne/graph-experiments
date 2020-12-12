@@ -1,4 +1,4 @@
-#include <egraph/FeatureGraphLoader.h>
+#include <egraph/Loader.h>
 
 #include <ezgdal/ezgdal.h>
 
