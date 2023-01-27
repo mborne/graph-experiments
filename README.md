@@ -13,12 +13,6 @@ Graph processing experiments based on **boost::graph** and **GDAL / OGR** to loa
 * [src\egraph\routing\PathTree.h](src\egraph\routing\PathTree.h) is using [Boost Multi-Index](https://www.boost.org/doc/libs/1_63_0/libs/multi_index/doc/index.html) to index `(visited,cost)` to optimize Dijkstra path finding.
 * [src\egraph\FeatureGraph.h](src\egraph\FeatureGraph.h) is providing a [Boost graph](https://www.boost.org/doc/libs/1_75_0/libs/graph/doc/index.html) where vertex and edges are [OGRFeature](https://gdal.org/doxygen/classOGRFeature.html) from [GDAL](https://gdal.org/doxygen/index.html)
 
-## Examples
-
-* [example/demo-boost.cpp](example/demo-boost.cpp) - getting started with boost graph
-* [example/demo-dijkstra.cpp](example/demo-dijkstra.cpp) - testing path finding.
-* [example/demo-PathTree.cpp](example/demo-PathTree.cpp) - testing PathTree on large graph (**warning : requires to prepare vertex_layer and edge_layer tables**)
-
 ## Build
 
 ```bash
@@ -31,7 +25,7 @@ make test
 
 ## Examples
 
-* [example/demo-boost.cpp](example/demo-boost.cpp) : Some notes to use `boost::graph`
+* [example/demo-boost.cpp](example/demo-boost.cpp) : Getting started with `boost::graph`
 * [example/demo-dijkstra.cpp](example/demo-dijkstra.cpp) : Shortest path computation
 * [example/demo-ogr.cpp](example/demo-ogr.cpp) : Load `FeatureGraph` using GDAL/OGR and compute some `ShortestPathTree`
 
