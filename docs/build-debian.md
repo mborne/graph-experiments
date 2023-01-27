@@ -1,7 +1,7 @@
 
 # CMake - Building on debian or ubuntu
 
-* Install dependencies :
+## Install requirements
 
 ```bash
 sudo apt-get update
@@ -13,7 +13,7 @@ sudo apt-get install -y --no-install-recommends \
     libgdal-dev
 ```
 
-* Build with cmake
+## Build with cmake
 
 ```bash
 mkdir -p build

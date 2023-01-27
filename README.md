@@ -17,6 +17,7 @@ Graph processing experiments based on **boost::graph** and **GDAL / OGR** to loa
 ## Build
 
 * [CMake - Building on debian or ubuntu](docs/build-debian.md)
+* [CMake - Building with docker](docs/build-docker.md)
 * [CMake - Building on windows with Microsoft Visual Studio (nmake) and miniconda](docs/build-windows.md)
 
 ## Examples
