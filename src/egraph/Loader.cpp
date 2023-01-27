@@ -2,7 +2,7 @@
 
 #include <ezgdal/ezgdal.h>
 
-#include <gdal/ogrsf_frmts.h>
+#include <ogrsf_frmts.h>
 
 #include <sstream>
 #include <exception>
