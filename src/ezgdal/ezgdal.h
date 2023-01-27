@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include <gdal/ogrsf_frmts.h>
+#include <ogrsf_frmts.h>
 
 namespace ezgdal {
 

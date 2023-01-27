@@ -1,6 +1,6 @@
 #include <egraph/concept/wkt.h>
 
-#include <gdal/ogrsf_frmts.h>
+#include <ogrsf_frmts.h>
 
 namespace egraph {
 namespace concept {
