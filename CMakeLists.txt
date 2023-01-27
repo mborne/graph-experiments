@@ -4,12 +4,12 @@ cmake_minimum_required(VERSION 2.8)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# ensure a .lib is created
+# ensure that a .lib is created for windows
 if (CMAKE_BUILD_SHARED)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
 
-find_package(GDAL "2.3.0" REQUIRED)
+find_package(GDAL "3.4.1" REQUIRED)
 message("-- Found GDAL ${GDAL_VERSION}")
 
 set (Boost_USE_STATIC_LIBS OFF CACHE BOOL "use static libraries from Boost")
