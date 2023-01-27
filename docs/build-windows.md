@@ -1,4 +1,4 @@
-# Building on windows with Microsoft Visual Studio and miniconda
+# CMake - Building on windows with Microsoft Visual Studio and miniconda
 
 ```bat
 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x64

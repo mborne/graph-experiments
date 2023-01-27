@@ -13,15 +13,11 @@ Graph processing experiments based on **boost::graph** and **GDAL / OGR** to loa
 * [src\egraph\routing\PathTree.h](src\egraph\routing\PathTree.h) is using [Boost Multi-Index](https://www.boost.org/doc/libs/1_63_0/libs/multi_index/doc/index.html) to index `(visited,cost)` to optimize Dijkstra path finding.
 * [src\egraph\FeatureGraph.h](src\egraph\FeatureGraph.h) is providing a [Boost graph](https://www.boost.org/doc/libs/1_75_0/libs/graph/doc/index.html) where vertex and edges are [OGRFeature](https://gdal.org/doxygen/classOGRFeature.html) from [GDAL](https://gdal.org/doxygen/index.html)
 
+
 ## Build
 
-```bash
-mkdir -p build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Debug ..
-make
-make test
-```
+* [CMake - Building on debian or ubuntu](docs/build-debian.md)
+* [CMake - Building on windows with Microsoft Visual Studio (nmake) and miniconda](docs/build-windows.md)
 
 ## Examples
 
