@@ -10,8 +10,8 @@ Graph processing experiments based on **boost::graph** and **GDAL / OGR** to loa
 
 ## Key Features
 
-* [src\egraph\routing\PathTree.h](src\egraph\routing\PathTree.h) is using [Boost Multi-Index](https://www.boost.org/doc/libs/1_63_0/libs/multi_index/doc/index.html) to index `(visited,cost)` to optimize Dijkstra path finding.
-* [src\egraph\FeatureGraph.h](src\egraph\FeatureGraph.h) is providing a [Boost graph](https://www.boost.org/doc/libs/1_75_0/libs/graph/doc/index.html) where vertex and edges are [OGRFeature](https://gdal.org/doxygen/classOGRFeature.html) from [GDAL](https://gdal.org/doxygen/index.html)
+* [src/egraph/routing/PathTree.h](src/egraph/routing/PathTree.h) is using [Boost Multi-Index](https://www.boost.org/doc/libs/1_63_0/libs/multi_index/doc/index.html) to index `(visited,cost)` to optimize **Dijkstra path finding**.
+* [src/egraph/FeatureGraph.h](src/egraph/FeatureGraph.h) is providing a [Boost graph](https://www.boost.org/doc/libs/1_75_0/libs/graph/doc/index.html) where vertex and edges are [OGRFeature](https://gdal.org/doxygen/classOGRFeature.html) from [GDAL](https://gdal.org/doxygen/index.html)
 
 
 ## Build
